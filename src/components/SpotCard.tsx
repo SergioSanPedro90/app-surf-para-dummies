@@ -39,7 +39,7 @@ const SpotCard = ({ waveHeight, wavePeriod, windSpeed }: SpotCardProps) => {
           </View>
           <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
             <Text className="text-xs text-gray-500">Dirección</Text>
-            <Text className="text-xl font-bold">NO</Text>
+            <Text className="text-xl font-bold">- NO</Text>
           </View>
         </View>
 
