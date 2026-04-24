@@ -22,7 +22,7 @@ const SpotCard = ({ waveHeight, wavePeriod, windSpeed }: SpotCardProps) => {
 
       {/* BODY */}
       <View className="bg-white rounded-b-3xl p-3 overflow-hidden">
-        
+
         {/* STATS */}
         <View className="flex-row flex-wrap gap-2 py-4">
           <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
@@ -35,7 +35,7 @@ const SpotCard = ({ waveHeight, wavePeriod, windSpeed }: SpotCardProps) => {
           </View>
           <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
             <Text className="text-xs text-gray-500">Viento</Text>
-            <Text className="text-xl font-bold">{windSpeed}km/h</Text>
+            <Text className="text-xl font-bold">{windSpeed}km/</Text>
           </View>
           <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
             <Text className="text-xs text-gray-500">Dirección</Text>
