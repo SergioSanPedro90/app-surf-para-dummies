@@ -1,4 +1,5 @@
 import { View, Text } from "react-native";
+import StatsBox from "./StatsBox";
 
 interface SpotCardProps {
   waveHeight: number;
@@ -22,25 +23,12 @@ const SpotCard = ({ waveHeight, wavePeriod, windSpeed }: SpotCardProps) => {
 
       {/* BODY */}
       <View className="bg-white rounded-b-3xl p-3 overflow-hidden">
-        
         {/* STATS */}
-        <View className="flex-row flex-wrap gap-2 py-4">
-          <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
-            <Text className="text-xs text-gray-500">Ola</Text>
-            <Text className="text-xl font-bold">{waveHeight}m</Text>
-          </View>
-          <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
-            <Text className="text-xs text-gray-500">Período</Text>
-            <Text className="text-xl font-bold">{wavePeriod}s</Text>
-          </View>
-          <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
-            <Text className="text-xs text-gray-500">Viento</Text>
-            <Text className="text-xl font-bold">{windSpeed}km/h</Text>
-          </View>
-          <View className="items-center bg-gray-100 rounded-xl p-3 w-[48%]">
-            <Text className="text-xs text-gray-500">Dirección</Text>
-            <Text className="text-xl font-bold">- NO</Text>
-          </View>
+        <View className="flex-row flex-wrap gap-3 py-4">
+          <StatsBox text="Ola" stat={`${waveHeight}m`} />
+          <StatsBox text="Período" stat={`${wavePeriod}s`} />
+          <StatsBox text="Viento" stat={`${windSpeed}km/h`} />
+          <StatsBox text="Dirección" stat="NO" />
         </View>
 
         {/* LINEA */}
