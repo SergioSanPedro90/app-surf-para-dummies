@@ -5,6 +5,7 @@ import HomeHeader from "../components/HomeHeader";
 import HomeSpotCard from "../components/HomeSpotCard";
 import SearchBarComponent from "../components/SearchBarComponent";
 import { FlatList, Pressable, Text, View } from "react-native";
+import HomeSpotTabs from "../components/HomeSpotTabs";
 
 const spots = [
   {
@@ -76,34 +77,9 @@ export default function Index() {
       <SearchBarComponent />
 
       {/* TABS */}
-      <View className="flex justify-center items-center mt-6">
-        <Text className="text-3xl font-bold">SPOTS</Text>
+      <HomeSpotTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-        <View className="flex-row mt-4 gap-24">
-          <Pressable onPress={() => setActiveTab("nearby")}>
-            <Text
-              className={`text-center font-bold text-base ${activeTab === "nearby" ? "text-black text-lg" : "text-gray-500"}`}
-            >
-              Cercanos
-            </Text>
-            <View
-              className={`h-[3px] mt-1 rounded-full w-32 ${activeTab === "nearby" ? "bg-blue-400" : "bg-transparent"}`}
-            />
-          </Pressable>
-
-          <Pressable onPress={() => setActiveTab("favs")}>
-            <Text
-              className={`text-center font-bold text-base ${activeTab === "favs" ? "text-black text-lg" : "text-gray-500"}`}
-            >
-              Favoritos
-            </Text>
-            <View
-              className={`h-[3px] mt-1 rounded-full w-32 ${activeTab === "favs" ? "bg-blue-400" : "bg-transparent"}`}
-            />
-          </Pressable>
-        </View>
-      </View>
-
+      {/* LISTA SPOTS */}
       {activeTab === "nearby" ? (
         <FlatList
           className="mt-4"
