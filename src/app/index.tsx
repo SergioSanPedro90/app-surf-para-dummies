@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getSurfData } from "../services/stormgalss";
 import { SafeAreaView } from "react-native-safe-area-context";
-import HomeHeader from "../components/HomeHeader";
-import HomeSpotCard from "../components/HomeSpotCard";
-import SearchBarComponent from "../components/SearchBarComponent";
+import HomeHeader from "../components/home/HomeHeader";
+import HomeSpotCard from "../components/home/HomeSpotCard";
+import SearchBarComponent from "../components/home/SearchBarComponent";
 import { FlatList, Pressable, Text, View } from "react-native";
-import HomeSpotTabs from "../components/HomeSpotTabs";
+import HomeSpotTabs from "../components/home/HomeSpotTabs";
 import { spots } from "../constants/spotsData";
 
 
