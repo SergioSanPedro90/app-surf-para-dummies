@@ -1,57 +1,41 @@
-import { useEffect, useState } from "react";
-import { getSurfData } from "../services/stormgalss";
+import { router } from "expo-router";
+import { View, Text, Pressable, ImageBackground, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import HomeHeader from "../components/home/HomeHeader";
-import HomeSpotCard from "../components/home/HomeSpotCard";
-import SearchBarComponent from "../components/home/SearchBarComponent";
-import { FlatList, Pressable, Text, View } from "react-native";
-import HomeSpotTabs from "../components/home/HomeSpotTabs";
-import { spots } from "../constants/spotsData";
 
-
-export default function Index() {
-  const [data, setData] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<"nearby" | "favs">("nearby");
-
-  useEffect(() => {
-    getSurfData().then((result) => setData(result.hours[0]));
-  }, []);
-
+const index = () => {
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      {/* HEADER */}
-      <HomeHeader />
-
-      {/* BUSCADOR */}
-      <SearchBarComponent />
-
-      {/* TABS */}
-      <HomeSpotTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* LISTA SPOTS */}
-      {activeTab === "nearby" ? (
-        <FlatList
-          className="mt-4"
-          data={spots}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <HomeSpotCard
-              id={item.id}
-              name={item.name}
-              distance={item.distance}
-              image={item.image}
-              waveHeight={item.waveHeight}
-              wind={item.wind}
-              direction={item.direction}
-              power={item.power}
+    <ImageBackground
+      source={require("../../assets/images/index/surf_index_natural.png")}
+      className="flex-1"
+      resizeMode="cover"
+    >
+      <View className="flex-1 bg-black/20">
+        <SafeAreaView className="flex-1 justify-between p-6">
+          {/* LOGO Y TÍTULO */}
+          <View className="items-center mt-2">
+            <Image
+              source={require("../../assets/logo/logo_app.png")}
+              style={{ width: 200, height: 200 }}
             />
-          )}
-        />
-      ) : (
-        <Text className="text-center mt-6 text-red-600 font-bold text-xl">
-          Inicia sesión para ver favoritos
-        </Text>
-      )}
-    </SafeAreaView>
+          </View>
+
+          {/* BOTONES */}
+          <View className="gap-4 mb-6">
+            <Pressable className="bg-white rounded-full py-4 items-center">
+              <Text className="font-bold text-lg">niciar sesión</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push("/home")}
+              className="border border-white rounded-full py-4 items-center"
+            >
+              <Text className="text-white font-bold text-lg">
+                Continuar sin registrar
+              </Text>
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </View>
+    </ImageBackground>
   );
-}
+};
+export default index;
