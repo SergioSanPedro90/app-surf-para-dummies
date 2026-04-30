@@ -1,8 +1,141 @@
 import { router } from "expo-router";
-import { View, Text, Pressable, ImageBackground, Image } from "react-native";
+import { use, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  ImageBackground,
+  Image,
+  TextInput,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const index = () => {
+  const [showLogin, setShowLogin] = useState<"register" | "login" | "none">(
+    "none",
+  );
+  const [formData, setFormData] = useState({
+    nickName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleOnChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const renderContext = () => {
+    if (showLogin === "none")
+      return (
+        <View className="gap-4 mb-6">
+          <Pressable
+            onPress={() => setShowLogin("login")}
+            className="bg-white rounded-full py-4 items-center"
+          >
+            <Text className="font-bold text-lg">Iniciar sesión</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => router.push("/home")}
+            className="border border-white rounded-full py-4 items-center"
+          >
+            <Text className="text-white font-bold text-lg">
+              Continuar sin registrar
+            </Text>
+          </Pressable>
+        </View>
+      );
+
+    if (showLogin === "login")
+      return (
+        <View className="gap-4 mb-6">
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="rgba(255,255,255,0.6)"
+            className="border border-white rounded-full py-4 px-6 text-white"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            onChangeText={(value) => handleOnChange("email", value)}
+          />
+          <TextInput
+            placeholder="Contraseña"
+            placeholderTextColor="rgba(255,255,255,0.6)"
+            className="border border-white rounded-full py-4 px-6 text-white"
+            secureTextEntry
+            onChangeText={(value) => handleOnChange("password", value)}
+          />
+          <Pressable className="bg-white rounded-full py-4 items-center">
+            <Text className="font-bold text-lg">Entrar</Text>
+          </Pressable>
+          <View className="flex-row justify-center items-center text-md">
+            <Text className="text-white/70 items-center">
+              ¿No tienes cuenta?
+            </Text>
+            <Pressable
+              onPress={() => setShowLogin("register")}
+              className="items-center"
+            >
+              <Text className="text-white/70 underline mx-2">
+                Registrate aquí
+              </Text>
+            </Pressable>
+          </View>
+          <Pressable onPress={() => router.push("/")} className="items-center">
+            <Text className="text-white/70 text-md">VOLVER</Text>
+          </Pressable>
+        </View>
+      );
+
+    return (
+      <View className="gap-4 mb-6">
+        <TextInput
+          placeholder="Nombre o apodo"
+          placeholderTextColor="rgba(255,255,255,0.6)"
+          className="border border-white rounded-full py-4 px-6 text-white"
+          autoCapitalize="none"
+          onChangeText={(value) => handleOnChange("nickName", value)}
+        />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="rgba(255,255,255,0.6)"
+          className="border border-white rounded-full py-4 px-6 text-white"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={(value) => handleOnChange("email", value)}
+        />
+        <TextInput
+          placeholder="Contraseña"
+          placeholderTextColor="rgba(255,255,255,0.6)"
+          className="border border-white rounded-full py-4 px-6 text-white"
+          secureTextEntry
+          onChangeText={(value) => handleOnChange("password", value)}
+        />
+        <TextInput
+          placeholder="Repite contraseña"
+          placeholderTextColor="rgba(255,255,255,0.6)"
+          className="border border-white rounded-full py-4 px-6 text-white"
+          secureTextEntry
+          onChangeText={(value) => handleOnChange("confirmPassword", value)}
+        />
+        <Pressable className="bg-white rounded-full py-4 items-center">
+          <Text className="font-bold text-lg">Entrar</Text>
+        </Pressable>
+        <View className="flex-row justify-center items-center text-md">
+          <Text className="text-white/70 items-center">¿Ya tienes cuenta?</Text>
+          <Pressable
+            onPress={() => setShowLogin("login")}
+            className="items-center"
+          >
+            <Text className="text-white/70 underline mx-2">Inicia aquí</Text>
+          </Pressable>
+        </View>
+        <Pressable onPress={() => router.push("/")} className="items-center">
+          <Text className="text-white/70 text-md">VOLVER</Text>
+        </Pressable>
+      </View>
+    );
+  };
+
   return (
     <ImageBackground
       source={require("../../assets/images/index/surf_index_natural.png")}
@@ -19,20 +152,9 @@ const index = () => {
             />
           </View>
 
+          {renderContext()}
+
           {/* BOTONES */}
-          <View className="gap-4 mb-6">
-            <Pressable className="bg-white rounded-full py-4 items-center">
-              <Text className="font-bold text-lg">Iniciar sesión</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => router.push("/home")}
-              className="py-4 items-center"
-            >
-              <Text className="text-white font-bold text-lg">
-                Continuar sin registrar
-              </Text>
-            </Pressable>
-          </View>
         </SafeAreaView>
       </View>
     </ImageBackground>
