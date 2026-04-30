@@ -22,11 +22,11 @@ const index = () => {
           {/* BOTONES */}
           <View className="gap-4 mb-6">
             <Pressable className="bg-white rounded-full py-4 items-center">
-              <Text className="font-bold text-lg">niciar sesión</Text>
+              <Text className="font-bold text-lg">Iniciar sesión</Text>
             </Pressable>
             <Pressable
               onPress={() => router.push("/home")}
-              className="border border-white rounded-full py-4 items-center"
+              className="py-4 items-center"
             >
               <Text className="text-white font-bold text-lg">
                 Continuar sin registrar
