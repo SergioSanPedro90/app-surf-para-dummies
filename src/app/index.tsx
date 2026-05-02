@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,10 @@ import {
   TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from "../store/authStore";
 
 const index = () => {
+  const { signIn, signUp, user } = useAuthStore();
   const [showLogin, setShowLogin] = useState<"register" | "login" | "none">(
     "none",
   );
@@ -24,6 +26,10 @@ const index = () => {
   const handleOnChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  useEffect(() => {
+  if (user) router.push('/home')
+}, [user])
 
   const renderContext = () => {
     if (showLogin === "none")
@@ -64,7 +70,10 @@ const index = () => {
             secureTextEntry
             onChangeText={(value) => handleOnChange("password", value)}
           />
-          <Pressable className="bg-white rounded-full py-4 items-center">
+          <Pressable
+            onPress={() => signIn(formData.email, formData.password)}
+            className="bg-white rounded-full py-4 items-center"
+          >
             <Text className="font-bold text-lg">Entrar</Text>
           </Pressable>
           <View className="flex-row justify-center items-center text-md">
@@ -117,7 +126,12 @@ const index = () => {
           secureTextEntry
           onChangeText={(value) => handleOnChange("confirmPassword", value)}
         />
-        <Pressable className="bg-white rounded-full py-4 items-center">
+        <Pressable
+          onPress={() =>
+            signUp(formData.email, formData.nickName, formData.password)
+          }
+          className="bg-white rounded-full py-4 items-center"
+        >
           <Text className="font-bold text-lg">Entrar</Text>
         </Pressable>
         <View className="flex-row justify-center items-center text-md">
@@ -155,6 +169,7 @@ const index = () => {
           {renderContext()}
 
           {/* BOTONES */}
+          
         </SafeAreaView>
       </View>
     </ImageBackground>

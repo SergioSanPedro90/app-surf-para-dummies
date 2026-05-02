@@ -7,17 +7,17 @@ import SearchBarComponent from "../components/home/SearchBarComponent";
 import { FlatList, Pressable, Text, View } from "react-native";
 import HomeSpotTabs from "../components/home/HomeSpotTabs";
 import { spots } from "../constants/spotsData";
-
+import { useAuthStore } from "../store/authStore";
 
 export default function Index() {
+  const { signOut } = useAuthStore();
   const [data, setData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<"nearby" | "favs">("nearby");
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
-  const filterSpot = spots.filter(spot => 
-    spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  )
-
+  const filterSpot = spots.filter((spot) =>
+    spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  );
 
   useEffect(() => {
     getSurfData().then((result) => setData(result.hours[0]));
@@ -59,6 +59,17 @@ export default function Index() {
           Inicia sesión para ver favoritos
         </Text>
       )}
+
+      <View className="p-4">
+      <Pressable
+        onPress={() => signOut()}
+        className="border border-black rounded-full py-4 items-center"
+      >
+        <Text className="text-black font-bold text-lg">
+          Cerrar sesión
+        </Text>
+      </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
