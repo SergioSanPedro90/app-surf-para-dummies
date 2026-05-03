@@ -7,6 +7,8 @@ import {
   ImageBackground,
   Image,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../store/authStore";
@@ -28,8 +30,8 @@ const index = () => {
   };
 
   useEffect(() => {
-  if (user) router.push('/home')
-}, [user])
+    if (user) router.replace("/home");
+  }, [user]);
 
   const renderContext = () => {
     if (showLogin === "none")
@@ -151,28 +153,33 @@ const index = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/index/surf_index_natural.png")}
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={-100}
       className="flex-1"
-      resizeMode="cover"
     >
-      <View className="flex-1 bg-black/20">
-        <SafeAreaView className="flex-1 justify-between p-6">
-          {/* LOGO Y TÍTULO */}
-          <View className="items-center mt-2">
-            <Image
-              source={require("../../assets/logo/logo_app.png")}
-              style={{ width: 200, height: 200 }}
-            />
-          </View>
+      <ImageBackground
+        source={require("../../assets/images/index/surf_index_natural.png")}
+        className="flex-1"
+        resizeMode="cover"
+      >
+        <View className="flex-1 bg-black/20">
+          <SafeAreaView className="flex-1 justify-between p-6">
+            {/* LOGO Y TÍTULO */}
+            <View className="items-center mt-2">
+              <Image
+                source={require("../../assets/logo/logo_app.png")}
+                style={{ width: 200, height: 200 }}
+              />
+            </View>
 
-          {renderContext()}
+            {renderContext()}
 
-          {/* BOTONES */}
-          
-        </SafeAreaView>
-      </View>
-    </ImageBackground>
+            {/* BOTONES */}
+          </SafeAreaView>
+        </View>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 export default index;

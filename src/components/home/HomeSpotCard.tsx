@@ -32,7 +32,6 @@ const HomeSpotCard = ({
           {/* HEADER */}
           <View className="flex-row justify-between items-center mb-3">
             <View className="flex-row items-center gap-2">
-              <View className="w-3 h-3 rounded-full bg-green-400" />
               <Text className="font-bold text-lg text-white">{name}</Text>
             </View>
             <Text className="text-white font-bold ">{distance}</Text>

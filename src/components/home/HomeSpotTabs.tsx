@@ -7,8 +7,8 @@ interface HomeSpotTabs {
 
 const HomeSpotTabs = ({ activeTab, onTabChange }: HomeSpotTabs) => {
   return (
-    <View className="flex justify-center items-center mt-6">
-      <Text className="text-3xl font-bold">SPOTS</Text>
+    <View className="flex justify-center items-center mt-8">
+      <Text className="text-3xl font-bold">Spots</Text>
 
       <View className="flex-row mt-4 gap-24">
         <Pressable onPress={() => onTabChange("nearby")}>

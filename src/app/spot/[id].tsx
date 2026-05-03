@@ -5,8 +5,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import WaveCard from "@/src/components/spot/WaveCard";
 import WindCard from "@/src/components/spot/WindCard";
+import { useFavsStore } from "@/src/store/favoritesStore";
 
 export default function SpotDetail() {
+  const { addFav, removeFav, favs } = useFavsStore();
   const { id } = useLocalSearchParams();
   const today = new Date();
   const dateNow = today.toLocaleDateString("es-ES", {
@@ -28,9 +30,18 @@ export default function SpotDetail() {
             <Ionicons name="arrow-back" size={24} color="black" />
           </Pressable>
           <View className="flex-row gap-4">
-            <Pressable>
-              <Ionicons name="heart-outline" size={24} color="black" />
+            <Pressable
+              onPress={() =>
+                favs.includes(spot.id) ? removeFav(spot.id) : addFav(spot.id)
+              }
+            >
+              <Ionicons
+                name={favs.includes(spot.id) ? "heart" : "heart-outline"}
+                size={24}
+                color={favs.includes(spot.id) ? "red" : "black"}
+              />
             </Pressable>
+
             <Pressable>
               <Ionicons name="videocam-outline" size={24} color="black" />
             </Pressable>
