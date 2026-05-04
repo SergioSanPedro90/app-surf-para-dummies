@@ -45,7 +45,7 @@ const HomeSpotCard = ({
             </View>
             <View className="items-center">
               <Text className="text-xs text-white">Viento</Text>
-              <Text className="text-white font-bold">{wind}km/h</Text>
+              <Text className="text-white font-bold">{wind} km/h</Text>
             </View>
             <View className="items-center">
               <Text className="text-xs text-white">Dirección</Text>

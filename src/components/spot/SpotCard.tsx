@@ -19,9 +19,6 @@ const SpotCard = ({ waveHeight, name, wind, direction, power, wavePeriod }: Spot
           <Text className="font-bold text-2xl">{name}</Text>
           <Text>Muskiz, Pais Vasco</Text>
         </View>
-        <View className="bg-green-600 p-3 rounded-3xl mx-2">
-          <Text className="text-center">- Buena</Text>
-        </View>
       </View>
 
       {/* BODY */}

@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { getSurfData } from "../services/stormgalss";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeHeader from "../components/home/HomeHeader";
 import HomeSpotCard from "../components/home/HomeSpotCard";
 import SearchBarComponent from "../components/home/SearchBarComponent";
 import { FlatList, Pressable, Text, View } from "react-native";
 import HomeSpotTabs from "../components/home/HomeSpotTabs";
-import { spots } from "../constants/spotsData";
 import { useAuthStore } from "../store/authStore";
 import { useFavsStore } from "../store/favoritesStore";
 import SurfRulesCard from "../components/home/SurfRulesCard";
+import { getSpots, updateSpotConditions } from "../services/spotsService";
 
 export default function Index() {
   const { signOut } = useAuthStore();
+  const [spots, setSpots] = useState<any[]>([]);
   const { getFavs, favs } = useFavsStore();
   const { user } = useAuthStore();
   const [data, setData] = useState<any>(null);
@@ -23,8 +23,17 @@ export default function Index() {
     spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
 
+  const degreesToCardinal = (degrees: number) => {
+  const cardinals = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO']
+  const index = Math.round(degrees / 45) % 8
+  return cardinals[index]
+}
+
   useEffect(() => {
-    getSurfData().then((result) => setData(result.hours[0]));
+    updateSpotConditions();
+    getSpots().then((data) => {
+      setSpots(data);
+    });
     getFavs();
   }, []);
 
@@ -32,13 +41,13 @@ export default function Index() {
     <SafeAreaView className="flex-1 bg-white">
       {/* HEADER */}
       <HomeHeader />
-      
+
       {/* BUSCADOR */}
       <SearchBarComponent onSearch={setSearch} />
 
       <View className="h-[2px] bg-gray-300 mx-16 my-6 w-75" />
 
-      <SurfRulesCard/>
+      <SurfRulesCard />
 
       <View className="h-[2px] bg-gray-300 mx-16 mt-6 w-75" />
 
@@ -55,12 +64,15 @@ export default function Index() {
             <HomeSpotCard
               id={item.id}
               name={item.name}
-              distance={item.distance}
-              image={item.image}
-              waveHeight={item.waveHeight}
-              wind={item.wind}
-              direction={item.direction}
-              power={item.power}
+              distance={item.location}
+              image={
+                item.image_url ??
+                require("../../assets/images/beach/ave_generic.webp")
+              }
+              waveHeight={item.spot_conditions?.wave_height}
+              wind={item.spot_conditions?.wave_period}
+              direction={degreesToCardinal(item.spot_conditions?.wind_direction)}
+              power="--"
             />
           )}
           ListFooterComponent={<View className="h-10" />}
