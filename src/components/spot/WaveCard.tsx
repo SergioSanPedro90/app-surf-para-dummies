@@ -19,9 +19,6 @@ const WaveCard = ({ waveHeight, wavePeriod, power }: WaveCardProps) => {
           <Ionicons name="water" size={20} color="#60a5fa" />
           <Text className="font-bold text-white text-lg">Oleaje</Text>
         </View>
-        <View className="bg-green-500 px-3 py-1 rounded-full">
-          <Text className="text-white text-xs font-bold">Buena</Text>
-        </View>
       </View>
 
       {/* WAVE HEIGHT */}
