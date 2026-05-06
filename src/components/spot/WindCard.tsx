@@ -4,9 +4,10 @@ import { View, Text } from "react-native";
 interface WindCardProp {
   wind: number;
   direction: string;
+  windMax: number;
 }
 
-const WindCard = ({ wind, direction }: WindCardProp) => {
+const WindCard = ({ wind, direction, windMax}: WindCardProp) => {
   return (
     <View className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden"
       style={{ borderWidth: 0.5, borderColor: '#e5e7eb', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 8, elevation: 3 }}>
@@ -24,7 +25,7 @@ const WindCard = ({ wind, direction }: WindCardProp) => {
           <Text className="text-gray-400">km/h</Text>
         </View>
         <Ionicons name="compass" size={80} color="#e2e8f0" />
-        <View className="items-end">
+        <View className="items-center">
           <Text className="text-3xl font-bold text-slate-800">{direction}</Text>
           <Text className="text-gray-400">dirección</Text>
         </View>
@@ -33,7 +34,7 @@ const WindCard = ({ wind, direction }: WindCardProp) => {
       {/* RACHAS */}
       <View className="border-t border-gray-100 px-6 py-3">
         <Text className="text-xs text-gray-400">Rachas</Text>
-        <Text className="text-lg font-bold text-slate-800">40 km/h</Text>
+        <Text className="text-lg font-bold text-slate-800">{windMax} km/h</Text>
       </View>
 
     </View>

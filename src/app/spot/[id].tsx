@@ -97,14 +97,16 @@ export default function SpotDetail() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <WaveCard
+          swellPeriod={spot.spot_conditions?.swell_period}
+          swellHeight={spot.spot_conditions?.swell_height}
           waveHeight={spot.spot_conditions?.wave_height}
           wavePeriod={spot.spot_conditions?.wave_period}
-          power="--"
         />
         <WindCard
+          windMax={spot.spot_conditions?.wind_gusts}
           wind={spot.spot_conditions?.wind_speed}
           direction={degreesToCardinal(
-            spot.spot_conditions?.wind_direction ?? 0,
+            spot.spot_conditions?.wind_direction_10m ?? 0,
           )}
         />
         <View className="h-10" />

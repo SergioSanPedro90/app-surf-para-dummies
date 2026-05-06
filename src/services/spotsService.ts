@@ -3,8 +3,9 @@ import { supabase } from "./supabaseClient";
 export async function getSpots() {
   const { data, error } = await supabase
     .from("spots")
-    .select("*, spot_conditions(wave_height, wave_period, wind_speed, wind_direction)");
-
+    .select(
+      "*, spot_conditions(wave_height, wave_period, wave_direction, swell_height, swell_period, water_temp, wind_speed, wind_direction, wind_gusts)",
+    );
 
   if (error) {
     console.log(error);
@@ -18,24 +19,33 @@ export async function updateSpotConditions() {
   const spots = await getSpots();
 
   for (const spot of spots) {
-    const response = await fetch(
-      `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=wave_height,wave_period,wave_direction,wind_wave_height,wind_wave_direction`,
+    const responseMarine = await fetch(
+      `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_period,sea_surface_temperature`,
     );
+    const dataMarine = await responseMarine.json();
 
-    const data = await response.json();
+    const responseWeather = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kmh`,
+    );
+    const dataWeather = await responseWeather.json();
 
-    const current = data.current;
+    const marineCurrent = dataMarine.current;
+    const windCurrent = dataWeather.current;
 
     const { error: upsertError } = await supabase
       .from("spot_conditions")
       .upsert(
         {
           spot_id: spot.id,
-          wave_height: current.wave_height,
-          wave_period: current.wave_period,
-          wind_speed: current.wind_wave_height,
-          wind_direction: current.wave_direction,
-          updated_at: new Date(),
+          wave_height: marineCurrent.wave_height, // ola
+          wave_period: marineCurrent.wave_period, // período
+          wave_direction: marineCurrent.wave_direction, // dirección ola
+          swell_height: marineCurrent.swell_wave_height, // fondo
+          swell_period: marineCurrent.swell_wave_period, // período fondo
+          water_temp: marineCurrent.sea_surface_temperature, // temperatura
+          wind_speed: windCurrent.wind_speed_10m, // viento real
+          wind_direction: windCurrent.wind_direction_10m, // dirección viento
+          wind_gusts: windCurrent.wind_gusts_10m, // racha máxima
         },
         { onConflict: "spot_id" },
       );

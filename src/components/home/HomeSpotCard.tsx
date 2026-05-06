@@ -9,7 +9,8 @@ interface HomeSpotCardProps {
   waveHeight: number;
   wind: number;
   direction: string;
-  power: string;
+  swellHeight: number;
+  swellPeriod: number;
 }
 
 const HomeSpotCard = ({
@@ -19,9 +20,19 @@ const HomeSpotCard = ({
   waveHeight,
   wind,
   direction,
-  power,
   id,
+  swellHeight,
+  swellPeriod
 }: HomeSpotCardProps) => {
+
+  const wavePower = (swellHeight: number, swellPeriod: number) => {
+    const power = 0.5 * swellHeight * swellHeight * swellPeriod;
+  
+    if (power < 10) return "Baja";
+    if (power < 20) return "Media";
+    return "Alta";
+  };
+
   return (
     <Pressable onPress={() => router.push(`/spot/${id}` as any)}>
       <ImageBackground
@@ -53,7 +64,7 @@ const HomeSpotCard = ({
             </View>
             <View className="items-center">
               <Text className="text-xs text-white">Potencia</Text>
-              <Text className="text-white font-bold">{power}</Text>
+              <Text className="text-white font-bold">{wavePower(swellHeight, swellPeriod)}</Text>
             </View>
           </View>
         </View>

@@ -3,16 +3,37 @@ import { View, Text } from "react-native";
 
 interface WaveCardProps {
   waveHeight: number;
-  power: string;
   wavePeriod: number;
+  swellHeight: number;
+  swellPeriod: number;
 }
 
-const WaveCard = ({ waveHeight, wavePeriod, power }: WaveCardProps) => {
-  return (
+const WaveCard = ({
+  waveHeight,
+  wavePeriod,
+  swellHeight,
+  swellPeriod,
+}: WaveCardProps) => {
+  const wavePower = (swellHeight: number, swellPeriod: number) => {
+    const power = 0.5 * swellHeight * swellHeight * swellPeriod;
+  
+    if (power < 10) return "Baja";
+    if (power < 20) return "Media";
+    return "Alta";
+  };
 
-    <View className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden" 
-      style={{ borderWidth: 0.5, borderColor: '#e5e7eb', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 8, elevation: 3 }}>
-      
+  return (
+    <View
+      className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden"
+      style={{
+        borderWidth: 0.5,
+        borderColor: "#e5e7eb",
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 3,
+      }}
+    >
       {/* HEADER */}
       <View className="bg-slate-800 px-5 py-4 flex-row justify-between items-center">
         <View className="flex-row items-center gap-2">
@@ -31,18 +52,21 @@ const WaveCard = ({ waveHeight, wavePeriod, power }: WaveCardProps) => {
       <View className="flex-row border-t border-gray-100">
         <View className="flex-1 items-center py-4 border-r border-gray-100">
           <Text className="text-xs text-gray-400 mb-1">Período</Text>
-          <Text className="text-lg font-bold text-slate-800">{wavePeriod}s</Text>
+          <Text className="text-lg font-bold text-slate-800">
+            {wavePeriod} s
+          </Text>
         </View>
         <View className="flex-1 items-center py-4 border-r border-gray-100">
           <Text className="text-xs text-gray-400 mb-1">Fuerza</Text>
-          <Text className="text-lg font-bold text-slate-800">{power}</Text>
+          <Text className="text-lg font-bold text-slate-800">
+            {wavePower(swellHeight, swellPeriod)}
+          </Text>
         </View>
         <View className="flex-1 items-center py-4">
           <Text className="text-xs text-gray-400 mb-1">Dirección</Text>
           <Text className="text-lg font-bold text-slate-800">NO</Text>
         </View>
       </View>
-
     </View>
   );
 };
