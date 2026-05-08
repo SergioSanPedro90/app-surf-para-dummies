@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeHeader from "../components/home/HomeHeader";
 import HomeSpotCard from "../components/home/HomeSpotCard";
@@ -9,33 +9,65 @@ import { useAuthStore } from "../store/authStore";
 import { useFavsStore } from "../store/favoritesStore";
 import SurfRulesCard from "../components/home/SurfRulesCard";
 import { getSpots, updateSpotConditions } from "../services/spotsService";
+import * as Location from "expo-location";
+import { getDistance } from "../utils/distance";
+import { degreesToCardinal } from "../utils/degreesToCardinal";
 
 export default function Index() {
+  const [userLocation, setUserLocation] = useState<any>(null);
   const { signOut } = useAuthStore();
   const [spots, setSpots] = useState<any[]>([]);
   const { getFavs, favs } = useFavsStore();
   const { user } = useAuthStore();
-  const [data, setData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<"nearby" | "favs">("nearby");
   const [search, setSearch] = useState("");
 
-  const filterSpot = spots.filter((spot) =>
+  const sortedSpots = useMemo(() => {
+    if (!userLocation) return spots;
+    return [...spots].sort(
+      (a, b) =>
+        Number(
+          getDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            a.lat,
+            a.lng,
+          ),
+        ) -
+        Number(
+          getDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            b.lat,
+            b.lng,
+          ),
+        ),
+    );
+  }, [userLocation, spots]);
+
+  const filterSpot = sortedSpots.filter((spot) =>
     spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
 
-  const degreesToCardinal = (degrees: number) => {
-  const cardinals = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO']
-  const index = Math.round(degrees / 45) % 8
-  return cardinals[index]
-}
 
   useEffect(() => {
+    Location.requestForegroundPermissionsAsync().then(({ status }) => {
+      if (status === "granted") {
+        Location.getCurrentPositionAsync().then((location) => {
+          setUserLocation(location.coords);
+        });
+      }
+    });
+
     updateSpotConditions();
+
     getSpots().then((data) => {
       setSpots(data);
     });
+
     getFavs();
   }, []);
+
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -65,14 +97,18 @@ export default function Index() {
               id={item.id}
               name={item.name}
               distance={item.location}
+              swellHeight={item.spot_conditions?.swell_height}
+              swellPeriod={item.spot_conditions?.swell_period}
               image={
-                item.image_url ??
-                require("../../assets/images/beach/ave_generic.webp")
+                item.image_url
+                  ? { uri: item.image_url }
+                  : require("../../assets/images/beach/ave_generic.webp")
               }
               waveHeight={item.spot_conditions?.wave_height}
-              wind={item.spot_conditions?.wave_period}
-              direction={degreesToCardinal(item.spot_conditions?.wind_direction)}
-              power="--"
+              wind={item.spot_conditions?.wind_speed}
+              direction={degreesToCardinal(
+                item.spot_conditions?.wind_direction ?? 0,
+              )}
             />
           )}
           ListFooterComponent={<View className="h-10" />}
@@ -87,12 +123,19 @@ export default function Index() {
               <HomeSpotCard
                 id={item.id}
                 name={item.name}
-                distance={item.distance}
-                image={item.image}
-                waveHeight={item.waveHeight}
-                wind={item.wind}
-                direction={item.direction}
-                power={item.power}
+                distance={item.location}
+                image={
+                  item.image_url
+                    ? { uri: item.image_url }
+                    : require("../../assets/images/beach/ave_generic.webp")
+                }
+                waveHeight={item.spot_conditions?.wave_height}
+                wind={item.spot_conditions?.wind_speed}
+                swellHeight={item.spot_conditions?.swell_height}
+                swellPeriod={item.spot_conditions?.swell_period}
+                direction={degreesToCardinal(
+                  item.spot_conditions?.wind_direction ?? 0,
+                )}
               />
             )}
             ListFooterComponent={<View className="h-10" />}
