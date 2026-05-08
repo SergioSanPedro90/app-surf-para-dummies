@@ -90,7 +90,9 @@ export default function SpotDetail() {
 
         <View className="p-2">
           <Text className="font-bold text-3xl">{spot.name}</Text>
+          <Text className="text-gray-400 text-md">{spot.location}</Text>
           <Text className="mt-1 capitalize text-blue-400">{dateNow}</Text>
+          
         </View>
       </View>
 
@@ -104,6 +106,7 @@ export default function SpotDetail() {
         />
 
         <WaveCard
+          waveHeightMax={spot.spot_conditions?.wave_height_max}
           waveDirection={degreesToCardinal(
             spot.spot_conditions?.wave_direction ?? 0,
           )}

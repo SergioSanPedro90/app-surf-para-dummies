@@ -4,7 +4,7 @@ export async function getSpots() {
   const { data, error } = await supabase
     .from("spots")
     .select(
-      "*, spot_conditions(wave_height, wave_period, wave_direction, swell_height, swell_period, water_temp, wind_speed, wind_direction, wind_gusts, air_temp, rain_prob)",
+      "*, spot_conditions(wave_height, wave_period, wave_direction, swell_height, swell_period, water_temp, wind_speed, wind_direction, wind_gusts, air_temp, rain_prob, wave_height_max)",
     );
 
   if (error) {
@@ -20,7 +20,7 @@ export async function updateSpotConditions() {
 
   for (const spot of spots) {
     const responseMarine = await fetch(
-      `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_period,sea_surface_temperature`,
+      `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_period,sea_surface_temperature&daily=wave_height_max&timezone=Europe%2FBerlin`,
     );
     const dataMarine = await responseMarine.json();
     
@@ -39,6 +39,7 @@ export async function updateSpotConditions() {
         {
           spot_id: spot.id,
           wave_height: marineCurrent.wave_height, // ola
+          wave_max: marineCurrent.wave_height_max,
           wave_period: marineCurrent.wave_period, // período
           wave_direction: marineCurrent.wave_direction, // dirección ola
           swell_height: marineCurrent.swell_wave_height, // fondo

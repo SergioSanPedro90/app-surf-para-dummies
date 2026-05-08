@@ -59,7 +59,7 @@ export default function Index() {
       }
     });
 
-    updateSpotConditions();
+    // updateSpotConditions();
 
     getSpots().then((data) => {
       setSpots(data);
