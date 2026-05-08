@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 
 interface WaveCardProps {
   waveHeight: number;
+  waveHeightMax: number;
   wavePeriod: number;
   swellHeight: number;
   swellPeriod: number;
@@ -15,6 +16,7 @@ const WaveCard = ({
   swellHeight,
   swellPeriod,
   waveDirection,
+  waveHeightMax
 }: WaveCardProps) => {
   const wavePower = (swellHeight: number, swellPeriod: number) => {
     const power = 0.5 * swellHeight * swellHeight * swellPeriod;
@@ -26,10 +28,9 @@ const WaveCard = ({
 
   return (
     <View
-      className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden"
+      className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden border-l-4 border-blue-400"
       style={{
-        borderWidth: 0.5,
-        borderColor: "#e5e7eb",
+        borderWidth: 0.1,
         elevation: 3,
       }}
     >
@@ -41,7 +42,7 @@ const WaveCard = ({
 
       {/* WAVE HEIGHT */}
       <View className="py-4 items-center">
-        <Text className="text-6xl font-bold text-slate-800">{waveHeight}</Text>
+        <Text className="text-5xl font-bold text-slate-800">{waveHeight} - {waveHeightMax}</Text>
         <Text className="text-slate-400 text-lg">metros</Text>
       </View>
 

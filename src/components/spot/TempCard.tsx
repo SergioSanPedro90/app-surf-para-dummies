@@ -9,8 +9,8 @@ interface TempCardProps {
 
 const TempCard = ({ waterTemp, airTemp, rainProb, spotName }: TempCardProps) => {
   return (
-    <View className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden"
-      style={{ borderWidth: 0.5, borderColor: '#e5e7eb', elevation: 3 }}>
+    <View className="mx-4 mt-4 bg-white rounded-3xl overflow-hidden border-l-4 border-blue-400"
+      style={{ borderWidth: 0.1, elevation: 3 }}>
       
       <View className="bg-gray-100 px-5 py-2 flex-row items-center gap-2">
         <Text style={{ fontSize: 20 }}>🌡️</Text>
