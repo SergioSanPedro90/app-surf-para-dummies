@@ -16,7 +16,10 @@ const SurfRulesCard = () => {
   return (
     <>
       <Pressable onPress={() => setShowRules(true)} className="mx-5">
-        <View className="mx-2 mt-2 mb-2 rounded-2xl p-4 flex-row justify-between items-center bg-gray-100 border-l-4 border-blue-400">
+        <View
+          className="mx-2 mt-2 mb-2 rounded-2xl p-4 flex-row justify-between items-center bg-gray-100 border-l-4 border-blue-400"
+          style={{ borderWidth: 0.1, elevation: 3 }}
+        >
           <View className="flex-1 mr-4">
             <Text className="font-bold text-lg text-brand-dark">
               Reglas del surfing

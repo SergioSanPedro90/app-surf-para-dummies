@@ -1,6 +1,5 @@
-import { View, Text, Pressable, ScrollView, Modal } from "react-native";
+import { View, Text, Pressable, ScrollView, Modal, Linking } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { spots } from "@/src/constants/spotsData";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import WaveCard from "@/src/components/spot/WaveCard";
@@ -8,6 +7,7 @@ import WindCard from "@/src/components/spot/WindCard";
 import { useFavsStore } from "@/src/store/favoritesStore";
 import { useEffect, useState } from "react";
 import { getSpots } from "@/src/services/spotsService";
+import TempCard from "@/src/components/spot/TempCard";
 
 export default function SpotDetail() {
   const { addFav, removeFav, favs } = useFavsStore();
@@ -54,8 +54,7 @@ export default function SpotDetail() {
     return cardinals[index];
   };
 
-  if (!spot) return <Text>Spot no encontrado</Text>;
-
+ 
   if (!spot)
     return (
       <View className="flex-1 justify-center items-center">
@@ -80,10 +79,10 @@ export default function SpotDetail() {
               />
             </Pressable>
 
-            <Pressable>
+            <Pressable onPress={() => spot.webcam_url && Linking.openURL(spot.webcam_url)}>
               <Ionicons name="videocam-outline" size={24} color="black" />
             </Pressable>
-            <Pressable>
+            <Pressable  onPress={() => Linking.openURL(`https://maps.google.com/?q=${spot.lat},${spot.lng}`)}>
               <Ionicons name="map-outline" size={24} color="black" />
             </Pressable>
           </View>
@@ -91,12 +90,23 @@ export default function SpotDetail() {
 
         <View className="p-2">
           <Text className="font-bold text-3xl">{spot.name}</Text>
-          <Text className="text-gray-400 mt-1 capitalize">{dateNow}</Text>
+          <Text className="mt-1 capitalize text-blue-400">{dateNow}</Text>
         </View>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+
+        <TempCard
+          rainProb={spot.spot_conditions?.rain_prob}
+          airTemp={spot.spot_conditions?.air_temp}
+          spotName={spot.name}
+          waterTemp={spot.spot_conditions?.water_temp}
+        />
+
         <WaveCard
+          waveDirection={degreesToCardinal(
+            spot.spot_conditions?.wave_direction ?? 0,
+          )}
           swellPeriod={spot.spot_conditions?.swell_period}
           swellHeight={spot.spot_conditions?.swell_height}
           waveHeight={spot.spot_conditions?.wave_height}
@@ -106,7 +116,7 @@ export default function SpotDetail() {
           windMax={spot.spot_conditions?.wind_gusts}
           wind={spot.spot_conditions?.wind_speed}
           direction={degreesToCardinal(
-            spot.spot_conditions?.wind_direction_10m ?? 0,
+            spot.spot_conditions?.wind_direction ?? 0,
           )}
         />
         <View className="h-10" />

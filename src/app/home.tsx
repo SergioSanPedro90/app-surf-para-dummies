@@ -11,6 +11,7 @@ import SurfRulesCard from "../components/home/SurfRulesCard";
 import { getSpots, updateSpotConditions } from "../services/spotsService";
 import * as Location from "expo-location";
 import { getDistance } from "../utils/distance";
+import { degreesToCardinal } from "../utils/degreesToCardinal";
 
 export default function Index() {
   const [userLocation, setUserLocation] = useState<any>(null);
@@ -48,11 +49,6 @@ export default function Index() {
     spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
 
-  const degreesToCardinal = (degrees: number) => {
-    const cardinals = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
-    const index = Math.round(degrees / 45) % 8;
-    return cardinals[index];
-  };
 
   useEffect(() => {
     Location.requestForegroundPermissionsAsync().then(({ status }) => {
@@ -63,7 +59,7 @@ export default function Index() {
       }
     });
 
-    // updateSpotConditions();
+    updateSpotConditions();
 
     getSpots().then((data) => {
       setSpots(data);

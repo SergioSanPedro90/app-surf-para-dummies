@@ -4,7 +4,7 @@ export async function getSpots() {
   const { data, error } = await supabase
     .from("spots")
     .select(
-      "*, spot_conditions(wave_height, wave_period, wave_direction, swell_height, swell_period, water_temp, wind_speed, wind_direction, wind_gusts)",
+      "*, spot_conditions(wave_height, wave_period, wave_direction, swell_height, swell_period, water_temp, wind_speed, wind_direction, wind_gusts, air_temp, rain_prob)",
     );
 
   if (error) {
@@ -23,9 +23,10 @@ export async function updateSpotConditions() {
       `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_period,sea_surface_temperature`,
     );
     const dataMarine = await responseMarine.json();
+    
 
     const responseWeather = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kmh`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation_probability&wind_speed_unit=kmh`,
     );
     const dataWeather = await responseWeather.json();
 
@@ -46,6 +47,8 @@ export async function updateSpotConditions() {
           wind_speed: windCurrent.wind_speed_10m, // viento real
           wind_direction: windCurrent.wind_direction_10m, // dirección viento
           wind_gusts: windCurrent.wind_gusts_10m, // racha máxima
+          air_temp: windCurrent.temperature_2m,
+          rain_prob: windCurrent.precipitation_probability,
         },
         { onConflict: "spot_id" },
       );

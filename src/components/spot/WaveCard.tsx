@@ -6,6 +6,7 @@ interface WaveCardProps {
   wavePeriod: number;
   swellHeight: number;
   swellPeriod: number;
+  waveDirection: string;
 }
 
 const WaveCard = ({
@@ -13,10 +14,11 @@ const WaveCard = ({
   wavePeriod,
   swellHeight,
   swellPeriod,
+  waveDirection,
 }: WaveCardProps) => {
   const wavePower = (swellHeight: number, swellPeriod: number) => {
     const power = 0.5 * swellHeight * swellHeight * swellPeriod;
-  
+
     if (power < 10) return "Baja";
     if (power < 20) return "Media";
     return "Alta";
@@ -28,22 +30,17 @@ const WaveCard = ({
       style={{
         borderWidth: 0.5,
         borderColor: "#e5e7eb",
-        shadowColor: "#000",
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
         elevation: 3,
       }}
     >
       {/* HEADER */}
-      <View className="bg-slate-800 px-5 py-4 flex-row justify-between items-center">
-        <View className="flex-row items-center gap-2">
-          <Ionicons name="water" size={20} color="#60a5fa" />
-          <Text className="font-bold text-white text-lg">Oleaje</Text>
-        </View>
+      <View className="bg-gray-100 px-5 py-4 flex-row items-center gap-2">
+        <Text style={{ fontSize: 20 }}>🌊</Text>
+        <Text className="font-bold text-slate-800 text-lg">Oleaje</Text>
       </View>
 
       {/* WAVE HEIGHT */}
-      <View className="py-6 items-center">
+      <View className="py-4 items-center">
         <Text className="text-6xl font-bold text-slate-800">{waveHeight}</Text>
         <Text className="text-slate-400 text-lg">metros</Text>
       </View>
@@ -63,8 +60,10 @@ const WaveCard = ({
           </Text>
         </View>
         <View className="flex-1 items-center py-4">
-          <Text className="text-xs text-gray-400 mb-1">Dirección</Text>
-          <Text className="text-lg font-bold text-slate-800">NO</Text>
+          <Text className="text-xs text-gray-400 mb-1">Dirección Olas</Text>
+          <Text className="text-lg font-bold text-slate-800">
+            {waveDirection}
+          </Text>
         </View>
       </View>
     </View>

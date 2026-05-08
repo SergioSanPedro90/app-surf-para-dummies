@@ -34,10 +34,11 @@ const HomeSpotCard = ({
   };
 
   return (
-    <Pressable onPress={() => router.push(`/spot/${id}` as any)}>
+    <View style={{ elevation: 10, borderRadius: 24, marginHorizontal: 16, marginTop: 16, borderWidth: 0.5, }}>
+    <Pressable onPress={() => router.push(`/spot/${id}` as any)} >
       <ImageBackground
         source={image}
-        className="mt-4 mx-4 rounded-3xl overflow-hidden"
+        className="rounded-3xl overflow-hidden"
       >
         <View className="bg-black/30 p-4">
           {/* HEADER */}
@@ -70,6 +71,7 @@ const HomeSpotCard = ({
         </View>
       </ImageBackground>
     </Pressable>
+    </View>
   );
 };
 export default HomeSpotCard;
