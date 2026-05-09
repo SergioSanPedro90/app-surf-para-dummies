@@ -63,7 +63,7 @@ export default function SpotDetail() {
     );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-150">
       {/* HEADER */}
       <View className="p-4">
         <View className="flex-row justify-between items-center">

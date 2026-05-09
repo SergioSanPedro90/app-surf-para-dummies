@@ -20,7 +20,7 @@ const TempCard = ({ waterTemp, airTemp, rainProb, spotName }: TempCardProps) => 
       <View className="p-5">
         <Text className="text-gray-600 text-base leading-6">
           Hoy en <Text className="font-bold text-slate-800">{spotName}</Text> el agua está a{' '}
-          <Text className="font-bold text-slate-800">{waterTemp}°C</Text>, la temperatura del aire es de{' '}
+          <Text className="font-bold text-slate-800">{waterTemp}°C</Text>, la temperatura ambiente es de{' '}
           <Text className="font-bold text-slate-800">{airTemp}°C</Text> y hay un{' '}
           <Text className="font-bold text-slate-800">{rainProb}%</Text> de probabilidad de lluvia.
         </Text>

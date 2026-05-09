@@ -31,6 +31,7 @@ export async function updateSpotConditions() {
     const dataWeather = await responseWeather.json();
 
     const marineCurrent = dataMarine.current;
+    const marineDaily = dataMarine.daily;
     const windCurrent = dataWeather.current;
 
     const { error: upsertError } = await supabase
@@ -39,7 +40,7 @@ export async function updateSpotConditions() {
         {
           spot_id: spot.id,
           wave_height: marineCurrent.wave_height, // ola
-          wave_max: marineCurrent.wave_height_max,
+          wave_height_max: marineDaily.wave_height_max[0], // primer día = hoy
           wave_period: marineCurrent.wave_period, // período
           wave_direction: marineCurrent.wave_direction, // dirección ola
           swell_height: marineCurrent.swell_wave_height, // fondo

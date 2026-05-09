@@ -28,9 +28,11 @@ export default function RootLayout() {
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         resizeMode="cover"
       >
+        <View className="absolute inset-0 bg-black/40" />
         <Image
-          source={require("../../assets/logo/logo_app.png")}
-          style={{ width: 350, height: 350 }}
+          source={require("../../assets/logo/logo_app_surf.png")}
+          style={{ width: 370, height: 370 }}
+          resizeMode="contain"
         />
       </ImageBackground>
     );
