@@ -42,7 +42,7 @@ const WaveCard = ({
 
       {/* WAVE HEIGHT */}
       <View className="py-4 items-center">
-        <Text className="text-5xl font-bold text-slate-800">{waveHeight} - {waveHeightMax}</Text>
+        <Text className="text-5xl font-bold text-slate-800">{waveHeight}</Text>
         <Text className="text-slate-400 text-lg">metros</Text>
       </View>
 

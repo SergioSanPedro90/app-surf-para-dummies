@@ -151,14 +151,6 @@ export default function Index() {
         </Text>
       )}
 
-      <View className="p-4">
-        <Pressable
-          onPress={() => signOut()}
-          className="border border-black rounded-full py-4 items-center"
-        >
-          <Text className="text-black font-bold text-lg">Cerrar sesión</Text>
-        </Pressable>
-      </View>
     </SafeAreaView>
   );
 }
