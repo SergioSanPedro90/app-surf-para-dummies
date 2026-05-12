@@ -8,13 +8,16 @@ import { useFavsStore } from "@/src/store/favoritesStore";
 import { useEffect, useState } from "react";
 import { getSpots } from "@/src/services/spotsService";
 import TempCard from "@/src/components/spot/TempCard";
+import { useAuthStore } from "@/src/store/authStore";
 
 export default function SpotDetail() {
+  const { user } = useAuthStore()
   const { addFav, removeFav, favs } = useFavsStore();
   const { id } = useLocalSearchParams();
   const [spot, setSpot] = useState<any>(null);
   const [isFav, setIsFav] = useState(favs.includes(spot?.id ?? 0));
   const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("bg-blue-400");
 
   const today = new Date();
   const dateNow = today.toLocaleDateString("es-ES", {
@@ -33,6 +36,13 @@ export default function SpotDetail() {
 
   const handleFav = () => {
     if (!spot) return;
+
+    if (!user) {
+  setMessage("Inicia sesión para guardar favoritos");
+  setMessageColor("bg-red-400");
+  setTimeout(() => setMessage(""), 2000);
+  return;
+}
 
     if (isFav) {
       removeFav(spot.id);
@@ -128,7 +138,7 @@ export default function SpotDetail() {
       {message !== "" && (
         <Modal visible={message !== ""} transparent animationType="fade">
           <View className="flex-1 justify-end pb-10 items-center">
-            <View className="bg-blue-400 px-6 py-3 rounded-full">
+            <View className={`${messageColor} px-6 py-3 rounded-full`}>
               <Text className="text-white font-bold">{message}</Text>
             </View>
           </View>

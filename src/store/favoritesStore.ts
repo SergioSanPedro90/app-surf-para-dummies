@@ -7,6 +7,7 @@ interface Favorites {
   addFav: (spotId: number) => Promise<void>;
   removeFav: (spotId: number) => Promise<void>;
   getFavs: () => Promise<void>;
+  clearFavs: () => void;
 }
 
 export const useFavsStore = create<Favorites>((set) => ({
@@ -59,4 +60,6 @@ export const useFavsStore = create<Favorites>((set) => ({
 
     set({ favs: data.map((f) => f.spot_id) });
   },
+
+  clearFavs: () => set({ favs: [] })
 }));

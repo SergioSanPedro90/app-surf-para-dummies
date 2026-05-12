@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { supabase } from "../services/supabaseClient";
 import { router } from "expo-router";
+import { useFavsStore } from "./favoritesStore";
 
 interface AuthState {
   user: any | null;
@@ -52,11 +53,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   signOut: async () => {
-    set({ isLoading: true });
+  set({ isLoading: true });
 
-    await supabase.auth.signOut();
+  await supabase.auth.signOut();
 
-    set({ user: null, isLoading: false });
-    router.push('/')
-  },
+  useFavsStore.getState().clearFavs();
+  set({ user: null, isLoading: false });
+  router.push('/')
+},
 }));
