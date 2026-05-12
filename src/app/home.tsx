@@ -49,7 +49,6 @@ export default function Index() {
     spot.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
 
-
   useEffect(() => {
     Location.requestForegroundPermissionsAsync().then(({ status }) => {
       if (status === "granted") {
@@ -59,7 +58,7 @@ export default function Index() {
       }
     });
 
-    // updateSpotConditions();
+    updateSpotConditions();
 
     getSpots().then((data) => {
       setSpots(data);
@@ -67,7 +66,6 @@ export default function Index() {
 
     getFavs();
   }, []);
-
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -77,17 +75,7 @@ export default function Index() {
       {/* BUSCADOR */}
       <SearchBarComponent onSearch={setSearch} />
 
-      <View className="h-[2px] bg-gray-300 mx-16 my-6 w-75" />
-
-      <SurfRulesCard />
-
-      <View className="h-[2px] bg-gray-300 mx-16 mt-6 w-75" />
-
-      {/* TABS */}
-      <HomeSpotTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* LISTA SPOTS */}
-      {activeTab === "nearby" ? (
+      {search.length > 0 ? (
         <FlatList
           className="mt-4"
           data={filterSpot}
@@ -113,44 +101,78 @@ export default function Index() {
           )}
           ListFooterComponent={<View className="h-10" />}
         />
-      ) : user ? (
-        favs.length > 0 ? (
-          <FlatList
-            className="mt-4"
-            data={spots.filter((s) => favs.includes(s.id))}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <HomeSpotCard
-                id={item.id}
-                name={item.name}
-                distance={item.location}
-                image={
-                  item.image_url
-                    ? { uri: item.image_url }
-                    : require("../../assets/images/beach/ave_generic.webp")
-                }
-                waveHeight={item.spot_conditions?.wave_height}
-                wind={item.spot_conditions?.wind_speed}
-                swellHeight={item.spot_conditions?.swell_height}
-                swellPeriod={item.spot_conditions?.swell_period}
-                direction={degreesToCardinal(
-                  item.spot_conditions?.wind_direction ?? 0,
-                )}
-              />
-            )}
-            ListFooterComponent={<View className="h-10" />}
-          />
-        ) : (
-          <Text className="text-center my-6 text-red-600 font-bold text-xl">
-            No tienes aún ningún favorito
-          </Text>
-        )
       ) : (
-        <Text className="text-center mt-6 text-red-600 font-bold text-xl">
-          Inicia sesión para ver favoritos
-        </Text>
-      )}
+        <>
+          <View className="h-[2px] bg-gray-300 mx-16 my-6 w-75" />
+          <SurfRulesCard />
+          <View className="h-[2px] bg-gray-300 mx-16 mt-6 w-75" />
+          <HomeSpotTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
+          {activeTab === "nearby" ? (
+            <FlatList
+              className="mt-4"
+              data={filterSpot}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <HomeSpotCard
+                  id={item.id}
+                  name={item.name}
+                  distance={item.location}
+                  swellHeight={item.spot_conditions?.swell_height}
+                  swellPeriod={item.spot_conditions?.swell_period}
+                  image={
+                    item.image_url
+                      ? { uri: item.image_url }
+                      : require("../../assets/images/beach/ave_generic.webp")
+                  }
+                  waveHeight={item.spot_conditions?.wave_height}
+                  wind={item.spot_conditions?.wind_speed}
+                  direction={degreesToCardinal(
+                    item.spot_conditions?.wind_direction ?? 0,
+                  )}
+                />
+              )}
+              ListFooterComponent={<View className="h-10" />}
+            />
+          ) : user ? (
+            favs.length > 0 ? (
+              <FlatList
+                className="mt-4"
+                data={spots.filter((s) => favs.includes(s.id))}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <HomeSpotCard
+                    id={item.id}
+                    name={item.name}
+                    distance={item.location}
+                    image={
+                      item.image_url
+                        ? { uri: item.image_url }
+                        : require("../../assets/images/beach/ave_generic.webp")
+                    }
+                    waveHeight={item.spot_conditions?.wave_height}
+                    wind={item.spot_conditions?.wind_speed}
+                    swellHeight={item.spot_conditions?.swell_height}
+                    swellPeriod={item.spot_conditions?.swell_period}
+                    direction={degreesToCardinal(
+                      item.spot_conditions?.wind_direction ?? 0,
+                    )}
+                  />
+                )}
+                ListFooterComponent={<View className="h-10" />}
+              />
+            ) : (
+              <Text className="text-center my-6 text-red-600 font-bold text-xl">
+                No tienes aún ningún favorito
+              </Text>
+            )
+          ) : (
+            <Text className="text-center mt-6 text-red-600 font-bold text-xl">
+              Inicia sesión para ver favoritos
+            </Text>
+          )}
+        </>
+      )}
     </SafeAreaView>
   );
 }
