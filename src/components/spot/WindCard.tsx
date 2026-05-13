@@ -38,7 +38,7 @@ const WindCard = ({ wind, direction, windMax }: WindCardProp) => {
         {/* <Ionicons name="compass" size={80} color="#e2e8f0" /> */}
         <View className="items-center">
           <Text className="text-5xl font-bold text-slate-800">{direction}</Text>
-          <Text className="text-gray-400">dirección</Text>
+          <Text className="text-gray-400">Dirección</Text>
         </View>
       </View>
 

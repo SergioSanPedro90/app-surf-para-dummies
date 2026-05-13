@@ -15,6 +15,7 @@ import { useAuthStore } from "../store/authStore";
 
 const index = () => {
   const { signIn, signUp, user } = useAuthStore();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showLogin, setShowLogin] = useState<"register" | "login" | "none">(
     "none",
   );
@@ -27,6 +28,29 @@ const index = () => {
 
   const handleOnChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogin = async () => {
+    const error = await signIn(formData.email, formData.password);
+    if (error) {
+      setErrorMessage("Email o contraseña incorrectos");
+      setTimeout(() => setErrorMessage(null), 3000);
+    }
+  };
+
+  const handleRegister = async () => {
+    if (formData.password.length < 6) {
+      setErrorMessage("La contraseña debe tener al menos 6 caracteres");
+      setTimeout(() => setErrorMessage(null), 3000);
+      return;
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Las contraseñas no coinciden");
+      setTimeout(() => setErrorMessage(null), 3000);
+      return;
+    }
+    await signUp(formData.email, formData.nickName, formData.password);
   };
 
   useEffect(() => {
@@ -57,7 +81,15 @@ const index = () => {
     if (showLogin === "login")
       return (
         <View className="gap-4 mb-6">
+          {errorMessage && (
+            <View className="bg-red-500 border border-red-400 rounded-2xl py-3 px-4">
+              <Text className="text-black font-bold text-center text-sm">
+                {errorMessage}
+              </Text>
+            </View>
+          )}
           <TextInput
+            cursorColor="#F5C400"
             placeholder="Email"
             placeholderTextColor="rgba(255,255,255,0.6)"
             className="border border-white rounded-full py-4 px-6 text-white"
@@ -66,6 +98,7 @@ const index = () => {
             onChangeText={(value) => handleOnChange("email", value)}
           />
           <TextInput
+            cursorColor="#F5C400"
             placeholder="Contraseña"
             placeholderTextColor="rgba(255,255,255,0.6)"
             className="border border-white rounded-full py-4 px-6 text-white"
@@ -73,7 +106,7 @@ const index = () => {
             onChangeText={(value) => handleOnChange("password", value)}
           />
           <Pressable
-            onPress={() => signIn(formData.email, formData.password)}
+            onPress={handleLogin}
             className="bg-white rounded-full py-4 items-center"
           >
             <Text className="font-bold text-lg">Entrar</Text>
@@ -99,7 +132,15 @@ const index = () => {
 
     return (
       <View className="gap-4 mb-6">
+        {errorMessage && (
+          <View className="bg-red-500 border border-red-400 rounded-2xl py-3 px-4">
+            <Text className="text-black font-bold text-center text-sm">
+              {errorMessage}
+            </Text>
+          </View>
+        )}
         <TextInput
+          cursorColor="#F5C400"
           placeholder="Nombre o apodo"
           placeholderTextColor="rgba(255,255,255,0.6)"
           className="border border-white rounded-full py-4 px-6 text-white"
@@ -107,6 +148,7 @@ const index = () => {
           onChangeText={(value) => handleOnChange("nickName", value)}
         />
         <TextInput
+          cursorColor="#F5C400"
           placeholder="Email"
           placeholderTextColor="rgba(255,255,255,0.6)"
           className="border border-white rounded-full py-4 px-6 text-white"
@@ -115,6 +157,7 @@ const index = () => {
           onChangeText={(value) => handleOnChange("email", value)}
         />
         <TextInput
+          cursorColor="#F5C400"
           placeholder="Contraseña"
           placeholderTextColor="rgba(255,255,255,0.6)"
           className="border border-white rounded-full py-4 px-6 text-white"
@@ -122,6 +165,7 @@ const index = () => {
           onChangeText={(value) => handleOnChange("password", value)}
         />
         <TextInput
+          cursorColor="#F5C400"
           placeholder="Repite contraseña"
           placeholderTextColor="rgba(255,255,255,0.6)"
           className="border border-white rounded-full py-4 px-6 text-white"
@@ -129,9 +173,7 @@ const index = () => {
           onChangeText={(value) => handleOnChange("confirmPassword", value)}
         />
         <Pressable
-          onPress={() =>
-            signUp(formData.email, formData.nickName, formData.password)
-          }
+          onPress={handleRegister}
           className="bg-white rounded-full py-4 items-center"
         >
           <Text className="font-bold text-lg">Entrar</Text>

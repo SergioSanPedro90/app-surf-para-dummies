@@ -2,11 +2,12 @@ import { create } from "zustand";
 import { supabase } from "../services/supabaseClient";
 import { router } from "expo-router";
 import { useFavsStore } from "./favoritesStore";
+import { AuthError } from "@supabase/supabase-js";
 
 interface AuthState {
   user: any | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) =>  Promise<AuthError | null>;
   signUp: (email: string, nickName: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -25,10 +26,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (error) {
       console.log(error);
       set({ isLoading: false });
-      return;
+      return error;
     }
     set({ user: data.user, isLoading: false });
-    router.push('/home')
+    router.push("/home");
+    return null
   },
 
   signUp: async (email: string, nickName: string, password: string) => {
@@ -38,7 +40,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       email,
       password,
       options: {
-        data: { nickName },
+        data: {
+          nickName,
+          display_name: nickName,
+        },
       },
     });
 
@@ -49,16 +54,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
 
     set({ user: data.user, isLoading: false });
-    router.push('/home')
+    router.push("/home");
   },
 
   signOut: async () => {
-  set({ isLoading: true });
+    set({ isLoading: true });
 
-  await supabase.auth.signOut();
+    await supabase.auth.signOut();
 
-  useFavsStore.getState().clearFavs();
-  set({ user: null, isLoading: false });
-  router.push('/')
-},
+    useFavsStore.getState().clearFavs();
+    set({ user: null, isLoading: false });
+    router.push("/");
+  },
 }));
