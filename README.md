@@ -31,4 +31,6 @@ App móvil de previsión de surf para el Cantábrico, diseñada para surfistas q
 
 ## 👤 Autor
 
-Sergio San Pedro - [LinkedIn]() · [GitHub]()
+Sergio San Pedro - [LinkedIn](www.linkedin.com/in/
+sergio-san-pedro-alvarez
+) · [GitHub](https://github.com/SergioSanPedro90)
