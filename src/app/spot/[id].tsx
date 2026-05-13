@@ -1,4 +1,12 @@
-import { View, Text, Pressable, ScrollView, Modal, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  Modal,
+  Linking,
+  ImageBackground,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,7 +19,7 @@ import TempCard from "@/src/components/spot/TempCard";
 import { useAuthStore } from "@/src/store/authStore";
 
 export default function SpotDetail() {
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
   const { addFav, removeFav, favs } = useFavsStore();
   const { id } = useLocalSearchParams();
   const [spot, setSpot] = useState<any>(null);
@@ -38,11 +46,11 @@ export default function SpotDetail() {
     if (!spot) return;
 
     if (!user) {
-  setMessage("Inicia sesión para guardar favoritos");
-  setMessageColor("bg-red-400");
-  setTimeout(() => setMessage(""), 2000);
-  return;
-}
+      setMessage("Inicia sesión para guardar favoritos");
+      setMessageColor("bg-red-400");
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
 
     if (isFav) {
       removeFav(spot.id);
@@ -64,7 +72,6 @@ export default function SpotDetail() {
     return cardinals[index];
   };
 
- 
   if (!spot)
     return (
       <View className="flex-1 justify-center items-center">
@@ -73,41 +80,56 @@ export default function SpotDetail() {
     );
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-150">
+    <SafeAreaView className="flex-1 bg-blue-50">
       {/* HEADER */}
-      <View className="p-4">
-        <View className="flex-row justify-between items-center">
-          <Pressable onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-          </Pressable>
-          <View className="flex-row gap-4">
-            <Pressable onPress={handleFav}>
-              <Ionicons
-                name={favs.includes(spot.id) ? "heart" : "heart-outline"}
-                size={24}
-                color={favs.includes(spot.id) ? "red" : "black"}
-              />
+      <ImageBackground
+        source={
+          spot.image_url
+            ? { uri: spot.image_url }
+            : require("../../../assets/images/beach/ave_generic.webp")
+        }
+        className="rounded-3xl overflow-hidden"
+      >
+        <View className="bg-black/50 p-4">
+          <View className="flex-row justify-between items-center">
+            <Pressable onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
-
-            <Pressable onPress={() => spot.webcam_url && Linking.openURL(spot.webcam_url)}>
-              <Ionicons name="videocam-outline" size={24} color="black" />
-            </Pressable>
-            <Pressable  onPress={() => Linking.openURL(`https://maps.google.com/?q=${spot.lat},${spot.lng}`)}>
-              <Ionicons name="map-outline" size={24} color="black" />
-            </Pressable>
+            <View className="flex-row gap-4">
+              <Pressable onPress={handleFav}>
+                <Ionicons
+                  name={favs.includes(spot.id) ? "heart" : "heart-outline"}
+                  size={24}
+                  color={favs.includes(spot.id) ? "red" : "white"}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  spot.webcam_url && Linking.openURL(spot.webcam_url)
+                }
+              >
+                <Ionicons name="videocam-outline" size={24} color="white" />
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  Linking.openURL(
+                    `https://maps.google.com/?q=${spot.lat},${spot.lng}`,
+                  )
+                }
+              >
+                <Ionicons name="map-outline" size={24} color="white" />
+              </Pressable>
+            </View>
+          </View>
+          <View className="p-2">
+            <Text className="font-bold text-3xl text-white">{spot.name}</Text>
+            <Text className="text-white/70 text-md">{spot.location}</Text>
+            <Text className="mt-1 capitalize text-yellow-400">{dateNow}</Text>
           </View>
         </View>
-
-        <View className="p-2">
-          <Text className="font-bold text-3xl">{spot.name}</Text>
-          <Text className="text-gray-400 text-md">{spot.location}</Text>
-          <Text className="mt-1 capitalize text-blue-400">{dateNow}</Text>
-          
-        </View>
-      </View>
+      </ImageBackground>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-
         <TempCard
           rainProb={spot.spot_conditions?.rain_prob}
           airTemp={spot.spot_conditions?.air_temp}

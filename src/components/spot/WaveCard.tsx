@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { View, Text } from "react-native";
 
 interface WaveCardProps {
@@ -18,6 +19,8 @@ const WaveCard = ({
   waveDirection,
   waveHeightMax
 }: WaveCardProps) => {
+  const [powerColor, setPowerColor] =  useState('text-green')
+
   const wavePower = (swellHeight: number, swellPeriod: number) => {
     const power = 0.5 * swellHeight * swellHeight * swellPeriod;
 
@@ -25,6 +28,15 @@ const WaveCard = ({
     if (power < 20) return "Media";
     return "Alta";
   };
+
+  const waveColorPower = (swellHeight: number, swellPeriod: number) => {
+    const power = 0.5 * swellHeight * swellHeight * swellPeriod;
+
+    if (power < 10) return "text-green-500";
+    if (power < 20) return "text-orange-500";
+    return "text-red-500";
+  }
+
 
   return (
     <View
@@ -56,7 +68,7 @@ const WaveCard = ({
         </View>
         <View className="flex-1 items-center py-4 border-r border-gray-100">
           <Text className="text-xs text-gray-400 mb-1">Fuerza</Text>
-          <Text className="text-lg font-bold text-slate-800">
+          <Text className={`text-lg font-bold ${waveColorPower(swellHeight, swellPeriod)}`}>
             {wavePower(swellHeight, swellPeriod)}
           </Text>
         </View>
